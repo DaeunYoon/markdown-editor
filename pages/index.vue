@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Codemirror } from 'vue-codemirror'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
+import { marked } from 'marked'
 // import { javascript } from '@codemirror/lang-javascript'
 // import { oneDark } from '@codemirror/theme-one-dark'
 
@@ -22,21 +23,27 @@ const getCodemirrorStates = () => {
   // return ...
 }
 
+const markdownToHtml = computed(() => {
+  console.log(marked(code.value))
+  return marked(code.value)
+})
+
 function log(str: string) {
   console.log(str)
 }
 </script>
 
 <template>
-  <div class="h-screen">
+  <div class="flex h-screen">
     <Codemirror
       v-model="code"
-      :style="{ height: '100%' }"
+      :style="{ height: '100%', width: '50%' }"
       :autofocus="true"
       :indent-with-tab="true"
       :tab-size="2"
       :extensions=" markdown({ base: markdownLanguage })"
       @change="log(`change ${$event}`)"
     />
+    <div class="w-[50%]" v-html="markdownToHtml" />
   </div>
 </template>
