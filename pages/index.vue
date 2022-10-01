@@ -1,43 +1,42 @@
 <script setup lang="ts">
-import { makeParser } from '@sidestream-tech/nuxt-sidebase-parse'
-import { responseSchemaHealthCheck } from '~/server/schemas/healthz'
-import SidebaseLogoLight from '~/assets/sidebase_logo_light_icon_font_white_bg_long.svg'
-import SidebaseLogoDark from '~/assets/sidebase_logo_dark_icon_font_for_dark_bg_long.svg'
+import { Codemirror } from 'vue-codemirror'
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
+// import { javascript } from '@codemirror/lang-javascript'
+// import { oneDark } from '@codemirror/theme-one-dark'
 
-const transform = makeParser(responseSchemaHealthCheck)
-const { data: statusCheck, refresh } = await useFetch('/api/healthz', { transform })
+const code = ref('')
+// const extensions = [javascript(), oneDark]
 
-let refreshDataInterval: null | ReturnType<typeof setInterval> = null
-const refreshIntervalMS = 2000
-onMounted(() => {
-  refreshDataInterval = setInterval(refresh, refreshIntervalMS)
-})
+// Codemirror EditorView instance ref
+const view = shallowRef()
 
-onBeforeUnmount(() => {
-  if (refreshDataInterval) {
-    clearInterval(refreshDataInterval)
-  }
-})
+// Status is available at all times via Codemirror EditorView
+const getCodemirrorStates = () => {
+  const state = view.value.state
+  const ranges = state.selection.ranges
+  const selected = ranges.reduce((r, range) => r + range.to - range.from, 0)
+  const cursor = ranges[0].anchor
+  const length = state.doc.length
+  const lines = state.doc.lines
+  // more state info ...
+  // return ...
+}
 
-const ratingValue = ref(5)
+function log(str: string) {
+  console.log(str)
+}
 </script>
 
 <template>
-  <div class="flex h-screen items-center justify-center">
-    <div class="flex w-4/6 max-w-lg flex-col">
-      <SidebaseLogoLight class="w-72 fill-blue-200 dark:hidden" />
-      <SidebaseLogoDark class="hidden w-72 fill-blue-200 dark:block" />
-      <h1 class="text-xl dark:text-white">
-        Welcome to <a href="https://github.com/sidestream-tech/sidebase" target="_blank">sidebase</a>!
-      </h1>
-      <p>sidebase is a production ready, fullstack typescript nuxt 3 starter. It has a lot of batteries like testing, DB ORM, API examples, ... included. The data you see below is fetched from an API that is connected to a running database. DB, Frontend and Backend all start with a single command: <b>npm run dev</b></p>
-      <p>Make this starter your own - this page is just a boring placeholder. We rate this scaffold with:</p>
-      <a-rate v-model:value="ratingValue" />
-      <example-status
-        class="mt-5"
-        :status-check="statusCheck"
-        :fetch-interval="refreshIntervalMS / 1000"
-      />
-    </div>
+  <div class="h-screen">
+    <Codemirror
+      v-model="code"
+      :style="{ height: '100%' }"
+      :autofocus="true"
+      :indent-with-tab="true"
+      :tab-size="2"
+      :extensions=" markdown({ base: markdownLanguage })"
+      @change="log(`change ${$event}`)"
+    />
   </div>
 </template>
