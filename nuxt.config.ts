@@ -22,5 +22,5 @@ export default defineNuxtConfig({
   build: {
     transpile,
   },
-  modules: ['@nuxtjs/tailwindcss'],
+  css: ['~/assets/styles/main.css'],
 })

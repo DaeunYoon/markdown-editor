@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen w-full bg-white dark:bg-gray-800 dark:text-gray-100">
+  <div class="w-full" style="{height: 100vh; background-color: whtie}">
     <Head>
-      <Title>sidebase</Title>
+      <Title>markup</Title>
     </Head>
     <NuxtPage />
   </div>

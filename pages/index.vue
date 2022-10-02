@@ -34,7 +34,7 @@ function log(str: string) {
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex h-full">
     <Codemirror
       v-model="code"
       :style="{ height: '100%', width: '50%' }"
@@ -44,6 +44,6 @@ function log(str: string) {
       :extensions=" markdown({ base: markdownLanguage })"
       @change="log(`change ${$event}`)"
     />
-    <div class="w-[50%]" v-html="markdownToHtml" />
+    <div class="w-half" v-html="markdownToHtml" />
   </div>
 </template>
