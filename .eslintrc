@@ -1,6 +1,5 @@
 {
-    "plugins": ["tailwindcss"],
-    "extends": ["@antfu/vue", "plugin:tailwindcss/recommended"],
+    "extends": ["@antfu/vue"],
     "overrides": [
         {
             "files": [
@@ -23,6 +22,5 @@
             "1tbs"
         ],
         "no-unused-vars": "error",
-        "tailwindcss/no-custom-classname": "off"
     }
 }
